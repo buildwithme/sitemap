@@ -158,14 +158,14 @@ func (s *individualURLSitemap) parseHTML(chanLineText <-chan string, chanRawURLs
 	var base string
 	for text := range chanLineText {
 		if !foundBody {
-			if strings.Contains(text, "<body") {
-				foundBody = true
-				continue
-			}
 			if strings.Contains(text, "<base") {
 				indexStart := strings.Index(text, "href=\"") + 6
 				indexEnd := strings.Index(text[indexStart:], "\"")
 				base = text[indexStart : indexStart+indexEnd]
+			}
+			if strings.Contains(text, "<body") {
+				foundBody = true
+				// continue
 			}
 		}
 		for i := 0; i < len(text); i++ {
@@ -221,6 +221,7 @@ func (s *individualURLSitemap) parseHTML(chanLineText <-chan string, chanRawURLs
 							illegalCharacterInName = false
 						} else {
 							illegalCharacterInName = true
+							fmt.Printf("\n ------------------ </a> \n")
 						}
 						endATag = ""
 						continue
